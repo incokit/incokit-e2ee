@@ -1,0 +1,46 @@
+[package]
+name = "incokit-e2ee"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.74"
+license = "MIT"
+description = "End-to-end encryption core from the Incokit desktop app: AES-256-GCM, Argon2id, HKDF-SHA256 per-entity keys, and X25519 key sharing. Audit-friendly, server sees only ciphertext."
+repository = "https://github.com/incokit/incokit-e2ee"
+homepage = "https://github.com/incokit/incokit-e2ee"
+documentation = "https://docs.rs/incokit-e2ee"
+readme = "README.md"
+keywords = ["e2ee", "encryption", "aes-gcm", "x25519", "argon2"]
+categories = ["cryptography"]
+exclude = [".github/", "*.png"]
+
+[features]
+default = []
+# Optional OS-keychain storage for the master key (macOS Keychain / Windows
+# Credential Manager / Linux Secret Service). Pulls in the `keyring` crate.
+keychain = ["dep:keyring"]
+
+[dependencies]
+# Symmetric encryption + AEAD
+aes-gcm = "0.10"
+# Password/PIN hashing
+argon2 = "0.5"
+# Key derivation
+hkdf = "0.12"
+sha2 = "0.10"
+# Asymmetric key sharing
+x25519-dalek = { version = "2", features = ["static_secrets"] }
+# Randomness
+rand = "0.8"
+# Encoding + serde
+base64 = "0.22"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Memory hygiene
+zeroize = { version = "1", features = ["derive"] }
+# Errors
+thiserror = "2"
+# Optional OS keychain (feature-gated)
+keyring = { version = "3", features = ["apple-native", "windows-native"], optional = true }
+
+[dev-dependencies]
+hex = "0.4"
